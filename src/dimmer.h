@@ -6,5 +6,6 @@
 #define DIMMER_H
 
 int initDimmer(int brightness);
+int initFan(int fanSpeed);
 
 #endif

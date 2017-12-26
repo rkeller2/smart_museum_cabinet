@@ -3,7 +3,7 @@ Project: Smart Museum Cabinet
 Team: 17036
 Submitted to: GEOST
 Author: Robert Keller
-File description: This file
+File description: This file contains the state machine that controls the basic cabinet operation
 */
 
 #include <Arduino.h>
@@ -12,34 +12,39 @@ File description: This file
 
 #include "thermistor.h"
 #include "dimmer.h"
-
+/********************************************************************/
+//IF THSE VALUES ARE ALTERED, ALSO CHANGE THESE VALUES IN dimmer.cpp
+int  WARNINGTEMP = 0; //warning temperature in Fahrenheit
+int HALFPOWERTEMP = 100; //led half power temp
+int COOLDOWNTEMP = 300; //cool down (shutoff temp)
+/*******************************************************************/
 typedef enum stateType_enum{ idle, warning, halfPower, coolDown} stateType;  //define states
 volatile stateType state = idle; //set intital state
 
 int Tpin = 0;
-float warningTemp = 50; //warning temperature in Fahrenheit
-float coolDownTemp = 55; //cool down (shutoff temp)
-float halfPowerTemp = 52; //led half power temp
+
+int ledSetting;
+int fanSetting;
 
 void setup(){
   Serial.begin(9600);
+  pinMode(Tpin, INPUT);
 }
   void loop(){
 
           while(1){
             float temp;
             temp = thermistorRead(Tpin);
-            int ledSetting;
             // Serial.println(temp);
             // delay(500);
-
             switch(state){
               case idle:
-                Serial.println("idle");
+                Serial.print(temp);
+                Serial.println("    idle");
                 delay(1000);
                 ledSetting = initDimmer(2); //set leds to full power
-              //set fan to low speed
-                if(temp >= warningTemp){
+                fanSetting = initFan(0);
+                if(temp >= WARNINGTEMP){
                   state = warning;
                 }
                 else{
@@ -47,14 +52,15 @@ void setup(){
                 }
               break;
               case warning:
-                Serial.println("Warning");
+                Serial.print(temp);
+                Serial.println("    Wanring");
                 delay(1000); //print every 5 seconds
                 ledSetting = initDimmer(2); //set leds to full power
-                //increase fan speed - use map function
-                if(temp >= halfPowerTemp){
+                fanSetting = initFan(1); //fan set to low speed
+                if(temp >= HALFPOWERTEMP){
                   state = halfPower;
                 }
-                else if(temp < warningTemp){
+                else if(temp < WARNINGTEMP){
                   state = idle;
                 }
                 else{
@@ -62,29 +68,35 @@ void setup(){
                 }
               break;
               case halfPower:
-                Serial.println("Half Power");
+                Serial.print(temp);
+                Serial.println("    half power");
                 delay(1000);
                 ledSetting = initDimmer(1); //set leds to half power
-                if(temp >= coolDownTemp){
+                fanSetting = initFan(2); //fan speed increases linearly with temp using map function
+                if(temp >= COOLDOWNTEMP){
                   state = coolDown;
                 }
-                if(temp < halfPowerTemp){
+                else if(temp < HALFPOWERTEMP){
                   state = warning;
+                }
+                else if(temp >= COOLDOWNTEMP){
+                  state = coolDown;
                 }
                 else {
                   state = halfPower;
                 }
                 break;
               case coolDown:
-                Serial.println("Cooling");
+                Serial.print(temp);
+                Serial.println("    Cooling");
                 delay(1000);
                 ledSetting = initDimmer(0); //turn off LEDs
-                //set fans to full power
-                if(temp <= coolDownTemp){
-                  state = halfPower;
-                }
-                else{
+                fanSetting = initFan(3); //fan set to full speed
+                if(temp >= COOLDOWNTEMP){
                   state = coolDown;
+                }
+                else if(temp < COOLDOWNTEMP){
+                  state = halfPower;
                 }
                break;
 
