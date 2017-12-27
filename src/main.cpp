@@ -12,6 +12,7 @@ File description: This file contains the state machine that controls the basic c
 
 #include "thermistor.h"
 #include "dimmer.h"
+#include "ledFail.h"
 /********************************************************************/
 //IF THSE VALUES ARE ALTERED, ALSO CHANGE THESE VALUES IN dimmer.cpp
 int  WARNINGTEMP = 0; //warning temperature in Fahrenheit
@@ -31,12 +32,22 @@ void setup(){
   pinMode(Tpin, INPUT);
 }
   void loop(){
-
           while(1){
+            failShelf1();
+            // failShelf2();
+            // failShelf3();
+            // failShelf4();
+            // failShelf5();
+            // failBar1();
+            // failBar2();
+            // failBar3();
+            // failBar4();
+            // failBar5();
             float temp;
             temp = thermistorRead(Tpin);
             // Serial.println(temp);
             // delay(500);
+
             switch(state){
               case idle:
                 Serial.print(temp);
