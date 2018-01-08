@@ -14,9 +14,12 @@ user is notified that an LED has failed in that load.
 #include <avr/io.h>
 #include "ledFail.h"
 
+//Note: LED failure funciton only called in main in states where LEDs are operating on full power
+
 int readShelf1 = A1, readShelf2 = A2, readShelf3 = A3, readShelf4 = A4, readShelf5 = A5;
 int readBar1 = A6, readBar2 = A7, readBar3 = A8, readBar4 = A9, readBar5 = A10;
 
+//initialize voltage readings to zero
 float voltageShelf1 = 0.0;
 float voltageShelf2 = 0.0;
 float voltageShelf3 = 0.0;
@@ -30,14 +33,14 @@ float voltageBar5 = 0.0;
 float r1=100000.0; //value of resistor 1 in voltage divider
 float r2=10000.0; //value of resistor 2 in voltage divider
 
-int ledDrop = 12; //(voltage drop of one circuit - voltage drop of one led)
-int barDrop = 24; //voltage drop of one bar light
+int ledDrop = 11; //(voltage drop of one circuit - voltage drop of one led)
+int barDrop = 23; //voltage drop of one bar light
 
 bool fail = false; //initialize failure to false
 
 void failShelf1(){
   //read analog values for all LEDs, convert values to voltages
-  voltageShelf1 = ((analogRead(readShelf1) * 5.0) /1024.0) / (r2/(r1+r2));
+  voltageShelf1 = (((analogRead(readShelf1) * 5.0) /1024.0) / (r2/(r1+r2)));
   //eliminate any electrical noise by setting threashold
    if (voltageShelf1 < 0.1)
    {

@@ -15,13 +15,14 @@ for controlling LED brightness and fan speed
 /*****************************************************/
 //ENSURE VALUES MATCH THOSE IN main.cpp
 int  warningTemp = 0; //warning temperature in Fahrenheit
-int halfPowerTemp = 100; //led half power temp
+int halfPowerTemp = 60; //led half power temp
 int coolDownTemp = 300; //cool down (shutoff temp)
 /****************************************************/
 
+// duty cycle values for fan speed and LED brightness parameters
 int lowSpeed = 80;
 int middleSpeed = 200;
-int halfPowerVal = 10; //duty cycle value for LED brightness
+int halfPowerVal = 10;
 
 //initialize PWM pins
 int shelf1 = 13, shelf2 = 12, shelf3 = 11, shelf4 = 10, shelf5 = 9;
