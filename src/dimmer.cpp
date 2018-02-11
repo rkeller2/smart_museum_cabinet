@@ -1,27 +1,26 @@
+#include <Arduino.h>
+#include <Wire.h>
+#include <avr/io.h>
+#include "dimmer.h"
+
 /*
 Project: Smart Museum Cabinet
 Team: 17036
 Submitted to: GEOST
 Author: Robert Keller
 File description: This file initializes all PWM pins, and contains the functions
-for controlling LED brightness and fan speed
+for driving the dimming circuit to control LED brightness and fan speed
 */
-
-#include <Arduino.h>
-#include <Wire.h>
-#include <avr/io.h>
-#include "dimmer.h"
 
 /*****************************************************/
 //ENSURE VALUES MATCH THOSE IN main.cpp
-int  warningTemp = 0; //warning temperature in Fahrenheit
-int halfPowerTemp = 60; //led half power temp
-int coolDownTemp = 300; //cool down (shutoff temp)
+int  warningTemp = 87; //warning temperature in Fahrenheit
+int halfPowerTemp = 90; //led half power temp
+int coolDownTemp = 93; //cool down (shutoff temp)
 /****************************************************/
 
 // duty cycle values for fan speed and LED brightness parameters
-int lowSpeed = 80;
-int middleSpeed = 200;
+
 int halfPowerVal = 10;
 
 //initialize PWM pins
@@ -88,20 +87,11 @@ int initDimmer(int brightness){
 }
 
 int initFan(int fanSpeed){
-  //fan speed: 0 = off, 1 = low speed, 2 = increase speed, 3 = max speed
-    if(fanSpeed == 3){
-      analogWrite(fanPin, 255); //full speed
-    }
-    if(fanSpeed == 2){
-      //speed increases linearly with temperature
-      //outputs to fanPin, lower and upper bounds of temperature map linearly to lower and upper bounds of fan speed
-      map(fanPin, warningTemp, coolDownTemp, lowSpeed, middleSpeed);
+    if(fanSpeed == 0){
+      analogWrite(fanPin, 0); //fans off
     }
     if(fanSpeed == 1){
-      analogWrite(fanPin, lowSpeed);
-    }
-    if(fanSpeed == 0){
-      analogWrite(fanPin, 0);
+      analogWrite(fanPin, 255); //fans on
     }
     return fanSpeed;
 }

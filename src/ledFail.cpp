@@ -34,29 +34,29 @@ float r1=100000.0; //value of resistor 1 in voltage divider
 float r2=10000.0; //value of resistor 2 in voltage divider
 
 int ledDrop = 11; //(voltage drop of one circuit - voltage drop of one led)
-int barDrop = 23; //voltage drop of one bar light
+int barDrop = 12;
 
 bool fail = false; //initialize failure to false
 
-void failShelf1(){
-  //read analog values for all LEDs, convert values to voltages
-  voltageShelf1 = (((analogRead(readShelf1) * 5.0) /1024.0) / (r2/(r1+r2)));
-  //eliminate any electrical noise by setting threashold
-   if (voltageShelf1 < 0.1)
-   {
-    voltageShelf1=0.0;
-   }
-  //detect voltage increase, declare output accordingly
-  if(voltageShelf1 > (ledDrop)){
-    fail = true;
-    Serial.println("LED FAILURE SHELF 1");
-    }
-  else{
-    fail = false;
-    }
-  //Serial.println(voltageShelf1);
-   delay(300); //samples every 300ms
-}
+// void failShelf1(){
+//   //read analog values for all LEDs, convert values to voltages
+//   voltageShelf1 = (((analogRead(readShelf1) * 5.0) /1024.0) / (r2/(r1+r2)));
+//   //eliminate any electrical noise by setting threashold
+//    if (voltageShelf1 < 0.1)
+//    {
+//     voltageShelf1=0.0;
+//    }
+//   //detect voltage increase, declare output accordingly
+//   if(voltageShelf1 > (ledDrop)){
+//     fail = true;
+//     Serial.println("LED FAILURE SHELF 1");
+//     }
+//   else{
+//     fail = false;
+//     }
+//   Serial.println(voltageShelf1);
+//    delay(300); //samples every 300ms
+// }
 
 // //repeat same function for all LEDs
 // void failShelf2(){
@@ -126,29 +126,29 @@ void failShelf1(){
 //   //
 //    delay(300); //samples every 300ms
 // }
-// void failBar1(){
-//   voltageBar1 = (((analogRead(readBar1) * 5.0) /1024.0) / (r2/(r1+r2)));
-//   if (voltageBar1 < 0.1)
-//   {
-//     voltageBar1 = 0.0;
-//   }
-//   if(voltageBar1 >= (barDrop)){
-//     fail = true;
-//     Serial.println("BAR FAILURE 1");
-//     }
-//   else{
-//     fail = false;
-//     }
-//   //
-//    delay(300); //samples every 300ms
-// }
+void failBar1(){
+  voltageBar1 = (((analogRead(readBar1) * 5.0) /1024.0) / (r2/(r1+r2)));
+  if (voltageBar1 < 0.1)
+  {
+    voltageBar1 = 0.0;
+  }
+  if(voltageBar1 <= barDrop){
+    fail = true;
+    Serial.println("BAR FAILURE 1");
+    }
+  else{
+    fail = false;
+    }
+ //Serial.println(voltageBar1);
+   delay(300); //samples every 300ms
+}
 // void failBar2(){
 //   voltageBar2 = (((analogRead(readBar2) * 5.0) /1024.0) / (r2/(r1+r2)));
 //   if (voltageBar2 < 0.1)
 //   {
 //     voltageBar2 = 0.0;
 //   }
-//   if(voltageBar2 >= (barDrop)){
+//   if(voltageBar2 == 0){
 //     fail = true;
 //     Serial.println("BAR FAILURE 2");
 //     }
@@ -164,7 +164,7 @@ void failShelf1(){
 //   {
 //     voltageBar3 = 0.0;
 //   }
-//   if(voltageBar3 >= (barDrop)){
+//   if(voltageBar3 == 0{
 //     fail = true;
 //     Serial.println("BAR FAILURE 3");
 //     }
@@ -180,7 +180,7 @@ void failShelf1(){
 //   {
 //     voltageBar4 = 0.0;
 //   }
-//   if(voltageBar4 >= (barDrop)){
+//   if(voltageBar4 == 0){
 //     fail = true;
 //     Serial.println("BAR FAILURE 4");
 //     }
@@ -196,7 +196,7 @@ void failShelf1(){
 //   {
 //     voltageBar5 = 0.0;
 //   }
-//   if(voltageBar5 >= (barDrop)){
+//   if(voltageBar5 == 0){
 //     fail = true;
 //     Serial.println("BAR FAILURE 5");
 //     }
