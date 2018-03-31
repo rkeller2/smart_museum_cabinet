@@ -18,10 +18,9 @@ void failShelf2();
 void failShelf3();
 void failShelf4();
 void failShelf5();
-void failBar1();
-void failBar2();
-void failBar3();
-void failBar4();
-void failBar5();
+void failGimbal1();
+void failGimbal2();
+void failGimbal3();
+void failGimbal4();
 
 #endif

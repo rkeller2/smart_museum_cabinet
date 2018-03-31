@@ -12,20 +12,15 @@ Author: Robert Keller
 File description:
 */
 
-int hallSensor = 15;
-//int buzzer = 31;
+int hallSensor1 = 11; //left door
+int hallSensor2 = 12; //right door
 
 void alarm(){
-  //pinMode(buzzer, OUTPUT);
-  int alarmState = ((analogRead(hallSensor)));
+  int alarmState1 = ((analogRead(hallSensor1)));
+  int alarmState2 = ((analogRead(hallSensor2)));
 
-    if(alarmState == LOW){
+    if((alarmState1 == LOW)  | (alarmState2 ==LOW)){
       Serial.println("Cabinet Opened");
-      //digitalWrite(buzzer, HIGH);
     }
-    // else{
-    //   digitalWrite(buzzer,LOW);
-    // }
-
 
 }

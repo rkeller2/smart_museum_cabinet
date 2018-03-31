@@ -36,8 +36,8 @@ void setup(){
   void loop(){
         while(1){
           alarm();
-          int temp = (int(thermistor(analogRead(0)))); //read thermistor pin, store read temperature as integer
-          Serial.println(temp);
+          int temp1 = (int(thermistor(analogRead(0)))); //read thermistor pin, store read temperature as integer for inside cabinet
+        //  Serial.println(temp1);
 
         switch(state){
           case wait:
@@ -59,7 +59,7 @@ void setup(){
             delay(1000);
             ledSetting = initDimmer(2); //set leds to full power
             fanSetting = initFan(1); // turn on fans (full power)
-            if(temp >= WARNINGTEMP){
+            if(temp1 >= WARNINGTEMP){
               state = warning;
             }
             else if(power == 0){
@@ -68,16 +68,15 @@ void setup(){
             else{
               state = on;
             }
-            //failShelf1();
-            // failShelf2();
-            // failShelf3();
-            // failShelf4();
-            // failShelf5();
-             failBar1();
-            // failBar2();
-            // failBar3();
-            // failBar4();
-            // failBar5();
+           failShelf1();
+           // failShelf2();
+           // failShelf3();
+           // failShelf4();
+           // failShelf5();
+           // failGimbal1();
+           // failGimbal2();
+           // failGimbal3();
+           // failGimbal4();
           break;
 
           case warning:
@@ -85,10 +84,10 @@ void setup(){
             delay(1000); //print every 5 seconds
             ledSetting = initDimmer(2);
             fanSetting = initFan(1);
-            if(temp >= HALFPOWERTEMP){
+            if(temp1 >= HALFPOWERTEMP){
               state = halfPower;
             }
-            else if(temp < WARNINGTEMP){
+            else if(temp1 < WARNINGTEMP){
               state = on;
             }
             else if(power == 0){
@@ -105,13 +104,13 @@ void setup(){
             delay(1000);
             ledSetting = initDimmer(1); //set leds to half power
             fanSetting = initFan(1);
-            if(temp >= COOLDOWNTEMP){
+            if(temp1 >= COOLDOWNTEMP){
               state = coolDown;
             }
-            else if(temp < HALFPOWERTEMP){
+            else if(temp1 < HALFPOWERTEMP){
               state = warning;
             }
-            else if(temp >= COOLDOWNTEMP){
+            else if(temp1 >= COOLDOWNTEMP){
               state = coolDown;
             }
             else if(power == 0){
@@ -127,10 +126,10 @@ void setup(){
             delay(1000);
             ledSetting = initDimmer(0); //turn off LEDs
             fanSetting = initFan(1);
-            if(temp >= COOLDOWNTEMP){
+            if(temp1 >= COOLDOWNTEMP){
               state = coolDown;
             }
-            else if(temp < COOLDOWNTEMP){
+            else if(temp1 < COOLDOWNTEMP){
               state = halfPower;
             }
             else if(power == 0){
@@ -140,10 +139,13 @@ void setup(){
 
             case off:
               Serial.println("     OFF");
+              int temp2 = (int(thermistor(analogRead(1)))); //read thermistor pin, store read temperature as integer for outside cabinet
               ledSetting = initDimmer(0); //turn off LEDs
-              fanSetting = initFan(1);
-              delay(300000); //keep fans on for 5 minutes
-              fanSetting = initFan(0);
+              fanSetting = initFan(1); //run fan
+              //when inside temperature reaches outside temperature, turn off fans
+              if(temp1<=temp2){
+                fanSetting = initFan(0);
+              }
               delay(1000);
               state = wait;
             break;

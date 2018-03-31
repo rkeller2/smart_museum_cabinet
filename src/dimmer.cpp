@@ -26,10 +26,11 @@ int halfPowerVal = 10;
 //initialize PWM pins
 int shelf1 = 13, shelf2 = 12, shelf3 = 11, shelf4 = 10, shelf5 = 9;
 int bar1 = 8, bar2 = 7, bar3 = 6, bar4 = 5, bar5 = 4;
-int fanPin = 3;
+int gimbal = 3;
+int fanPin = 2;
 
 void ledSetup(){
-  //set brightness pins 4 to 13 as outputs for LEDs
+  //set brightness pins 3 to 13 as outputs for lights
   pinMode(shelf1, OUTPUT);
   pinMode(shelf2, OUTPUT);
   pinMode(shelf3, OUTPUT);
@@ -40,6 +41,7 @@ void ledSetup(){
   pinMode(bar3, OUTPUT);
   pinMode(bar4, OUTPUT);
   pinMode(bar5, OUTPUT);
+  pinMode(gimbal, OUTPUT);
   //set pin 3 as output for fan
   pinMode(fanPin, OUTPUT);
 }
@@ -57,6 +59,7 @@ int initDimmer(int brightness){
       analogWrite(bar3, 0);
       analogWrite(bar4, 0);
       analogWrite(bar5, 0);
+      analogWrite(gimbal,0);
     }
     if (brightness == 1){
       analogWrite(shelf1, halfPowerVal);
@@ -69,6 +72,7 @@ int initDimmer(int brightness){
       analogWrite(bar3, halfPowerVal);
       analogWrite(bar4, halfPowerVal);
       analogWrite(bar5, halfPowerVal);
+      analogWrite(gimbal,halfPowerVal);
     }
     if (brightness == 2){
       analogWrite(shelf1, 255);
@@ -81,6 +85,7 @@ int initDimmer(int brightness){
       analogWrite(bar3, 255);
       analogWrite(bar4, 255);
       analogWrite(bar5, 255);
+      analogWrite(gimbal, 255);
     }
 
       return brightness;
